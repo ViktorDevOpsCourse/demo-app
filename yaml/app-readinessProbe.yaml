@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-readinessprob
+  namespace: demo
+spec:
+  containers:
+    - name: app-container
+      image: gcr.io/k8s-k3s/demo:v1.0.0
+      ports:
+        - containerPort: 8000
+      readinessProbe:
+        httpGet:
+          path: /ready
+          port: 8000
+        initialDelaySeconds: 5
+        periodSeconds: 10
+        timeoutSeconds: 5
+      livenessProbe:
+        httpGet:
+          path: /
+          port: 8000
+        initialDelaySeconds: 10
+        periodSeconds: 15
+        timeoutSeconds: 3

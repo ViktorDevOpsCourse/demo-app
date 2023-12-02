@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-resource
+  namespace: demo
+spec:
+  containers:
+    - name: app-container
+      image: gcr.io/kuar-demo/kuard-amd64:1
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      readinessProbe:
+        httpGet:
+          path: /ready
+          port: 8000
+        initialDelaySeconds: 5
+        timeoutSeconds: 1
+        periodSeconds: 10
+        successThreshold: 1
+        failureThreshold: 3
+      livenessProbe:
+        httpGet:
+          path: /healthy
+          port: 8000
+        initialDelaySeconds: 10
+        timeoutSeconds: 1
+        periodSeconds: 20
+        successThreshold: 1
+        failureThreshold: 3
+      resources:
+        requests:
+          cpu: 100m
+          memory: 128Mi
+        limits:
+          cpu: 100m
+          memory: 256Mi
